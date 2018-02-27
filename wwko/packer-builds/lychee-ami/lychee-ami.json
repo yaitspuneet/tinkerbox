@@ -2,12 +2,12 @@
     "min_packer_version": "0.12.0",
     "variables": {
       "aws_region": "us-west-2",
-      "aws_access_key": "AKIAI4VMKLR7VOX53R3Q",
-      "aws_secret_key": "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"
+      "aws_access_key": "",
+      "aws_secret_key": ""
     },
     "builders": [{
-      "access_key": "AKIAI4VMKLR7VOX53R3Q",
-      "secret_key": "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",
+      "access_key": "",
+      "secret_key": "",
       "ami_name": "lychee-ubuntu-{{isotime | clean_ami_name}}",
       "ami_description": "An Ubuntu 16.04 AMI that has Apache2 and PHP installed.",
       "instance_type": "t2.micro",
