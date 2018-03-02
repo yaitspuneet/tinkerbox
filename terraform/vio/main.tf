@@ -1,8 +1,8 @@
 provider "openstack" {
-  user_name   = "scb-admin"
+  user_name   = "username"
   tenant_name = "scb-01"
-  password    = "P@ssw0rd508"
-  auth_url    = "https://vio.vxrack.spoc:5000/v2"
+  password    = "password"
+  auth_url    = "https://viofqdn:5000/v2"
   domain_name = "Default"
   insecure = "true"
 }
