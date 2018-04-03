@@ -41,7 +41,7 @@ resources:
     properties:
       name: wordpress
       imageType: ubuntu
-      instanceType: small
+      instanceType: medium
       networks:
         - name: '${wpnet.name}'
       cloudConfig: |
