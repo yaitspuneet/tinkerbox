@@ -3,25 +3,23 @@ iteration: 2
 description: >-
   simple wordpress app without load balancer and external storage in addition to
   the root disk
+inputs: {}
 resources:
   mysql:
     type: Cloud.Machine
     properties:
-      name: mysql-compute
-      imageType: ubuntu
-      instanceType: small
+      image: ubuntu.clement
+      flavor: t2.small.clement
       constraints:
-        - tag: dev
+        - tag: 'env:dev'
       networks:
         - name: '${wpnet.name}'
       cloudConfig: |
         #cloud-config
         repo_update: true
         repo_upgrade: all
-
         packages:
          - mysql-server
-
         runcmd:
          - sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/mysql.conf.d/mysqld.cnf
          - service mysql restart
@@ -31,24 +29,24 @@ resources:
     type: Cloud.Network
     properties:
       name: wpnet
-      networkType: public
+      networkType: external
       outboundAccess: true
       constraints:
-        - tag: public-net
-        - tag: dev
+        - tag: 'type:public-net'
   wordpress:
     type: Cloud.Machine
     properties:
       name: wordpress
-      imageType: ubuntu
-      instanceType: medium
+      image: ubuntu.clement
+      flavor: t2.small.clement
+      constraints:
+        - tag: 'env:dev'
       networks:
         - name: '${wpnet.name}'
       cloudConfig: |
         #cloud-config
         repo_update: true
         repo_upgrade: all
-
         packages:
          - apache2
          - php
@@ -56,7 +54,6 @@ resources:
          - libapache2-mod-php
          - php-mcrypt
          - mysql-client
-
         runcmd:
          - mkdir -p /var/www/html/mywordpresssite && cd /var/www/html && wget https://wordpress.org/latest.tar.gz && tar -xzf /var/www/html/latest.tar.gz -C /var/www/html/mywordpresssite --strip-components 1
          - i=0; while [ $i -le 5 ]; do mysql --connect-timeout=3 -h ${mysql.networks[0].address} -u root -pmysqlpassword -e "SHOW STATUS;" && break || sleep 15; i=$((i+1)); done
@@ -69,6 +66,3 @@ resources:
           - name: Wordpress Log Disk
             capacityGb: 10
             encrypted: false
-            constraints:
-              - tag: fast
-              - tag: dev
