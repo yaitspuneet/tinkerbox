@@ -1,15 +1,12 @@
-name: blueprint-1
-iteration: 1
-description: "Description"
 resources: 
   mysql: 
-    type: Compute
+    type: Cloud.Machine
     properties:
       name: mysql-compute 
-      imageType: ubuntu
-      instanceType: small
+      image: ubuntu.clement
+      flavor: t2.small.clement
       constraints:
-        - tag: dev
+        - tag: 'env:dev'
       networks: 
         - name: "${wpnet.name}"
       cloudConfig: |
@@ -27,11 +24,11 @@ resources:
            - mysql -e "FLUSH PRIVILEGES;"
   
   wpnet:
-    type: "Compute.Network"
+    type: Cloud.Network
     properties:
       name: wpnet
       networkType: public
       outboundAccess: true
       constraints:
-        - tag: public-net
-        - tag: dev
+        - tag: 'type:public-net'
+        - tag: 'env:dev'

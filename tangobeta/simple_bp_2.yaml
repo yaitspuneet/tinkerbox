@@ -3,13 +3,13 @@ iteration: 2
 description: "simple wordpress app without load balancer and external storage in addition to the root disk"
 resources:                         
   mysql: 
-    type: Compute
+    type: Cloud.Machine
     properties:
       name: mysql-compute 
-      imageType: ubuntu
-      instanceType: small
+      image: ubuntu.clement
+      flavor: t2.small.clement
       constraints:
-        - tag: dev
+        - tag: 'env:dev'
       networks: 
         - name: "${wpnet.name}"
       cloudConfig: |
@@ -27,20 +27,20 @@ resources:
            - mysql -e "FLUSH PRIVILEGES;"
   
   wpnet:
-    type: "Compute.Network"
+    type: Cloud.Network
     properties:
       name: wpnet
       networkType: public
       outboundAccess: true
       constraints:
-        - tag: public-net
-        - tag: dev   
+        - tag: 'type:public-net'
+        - tag: 'env:dev'
   wordpress: 
-    type: Compute
+    type: Cloud.Machine
     properties:
       name: wordpress 
-      imageType: ubuntu
-      instanceType: small
+      image: ubuntu.clement
+      flavor: t2.small.clement
       networks: 
         - name: "${wpnet.name}"
       cloudConfig: |
@@ -69,5 +69,5 @@ resources:
               capacityGb: 10
               encrypted: false
               constraints:
-                - tag: fast
-                - tag: dev
+                - tag: 'gold'
+                - tag: 'env:dev'

@@ -1,14 +1,15 @@
+inputs: {}
 resources:
   mysql:
     type: Cloud.Machine
     properties:
       name: mysql
-      instanceType: small
-      imageType: ubuntu
+      image: ubuntu.clement
+      flavor: t2.small.clement
       networks:
         - name: '${wpnet.name}'
       constraints:
-        - tag: test
+        - tag: 'env:test'
       cloudConfig: |
         #cloud-config
         repo_update: true
@@ -26,13 +27,13 @@ resources:
     type: Cloud.Machine
     properties:
       name: wordpress
-      instanceType: small
-      imageType: ubuntu
-      _cluster: 4
+      image: ubuntu.clement
+      flavor: t2.small.clement
+      _cluster: 3
       networks:
         - name: '${wpnet.name}'
       constraints:
-        - tag: test
+        - tag: 'env:test'
       cloudConfig: |
         #cloud-config
         repo_update: true
@@ -80,16 +81,16 @@ resources:
       networkType: external
       outboundAccess: true
       constraints:
-        - tag: test
-        - tag: isolated-net
+        - tag: 'env:test'
+        - tag: 'type:isolated-net'
   backup:
     type: Cloud.Machine
     properties:
       name: backup
-      instanceType: small
-      imageType: ubuntu
+      image: ubuntu.clement
+      flavor: t2.small.clement
       connectedTo: '${mysql.address}'
       networks:
         - name: '${wpnet.name}'
       constraints:
-        - tag: test
+        - tag: 'env:test'
